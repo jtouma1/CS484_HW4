@@ -57,7 +57,7 @@ def get_dataframes():
 
 	return actor_data,director_data,genre_data,tags_data,user_tag_data,train_data,test_data
 
-def main():
+def get_movies():
 	actor_data,director_data,genre_data,tags_data,user_tag_data,train_data,test_data = get_dataframes()
 	#print(director_data.dtypes)
 	#print(genre_data.dtypes)
@@ -103,13 +103,5 @@ def main():
 		for rating in train_data.query('movieID == @movie_id').itertuples():
 			movie.ratings.append((rating[1],rating[3]))
 		print("adding movie " + str(movie_id)+" to list")
-		movies.append(movie.to_dict())
-
-
-
-
-
-
-
-if __name__ == '__main__':
-	main()
+		movies.append(movie)
+	return movies
