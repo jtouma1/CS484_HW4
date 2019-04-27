@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np
 import threading
-import dill
 from movie import *
-import json
+
 
 #helper function that puts all data into pandas dataframes with correct headers
 def get_dataframes():
