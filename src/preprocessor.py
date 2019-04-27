@@ -53,6 +53,7 @@ def get_dataframes():
 	test_data.columns = test_data.loc[0].tolist()
 	test_data.drop([0],inplace = True)
 	test_data = test_data.astype({'userID':int, 'movieID':int})
+	print("finished getting data")
 
 	return actor_data,director_data,genre_data,tags_data,user_tag_data,train_data,test_data
 
@@ -101,6 +102,8 @@ def get_movies():
 			movie.genres.append(genre[2])
 		for rating in train_data.query('movieID == @movie_id').itertuples():
 			movie.ratings.append((rating[1],rating[3]))
-		print("adding movie " + str(movie_id)+" to list")
+		#print("adding movie " + str(movie_id)+" to list")
 		movies.append(movie)
+	print("finished making movies")
+
 	return movies
