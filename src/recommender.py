@@ -10,10 +10,13 @@ def main():
 	e = time.time()
 	#takes about 3.5 minutes rn
 	print("runtime = " + str(e-s) + " seconds")
+
+	''' Attempt at saving variables
 	with open('outputfile.json', 'w') as fout:
 		json.dump([x.to_dict() for x in movies], fout)
-
+	
 	print("runtime = " + str(e-s) + " seconds")
+	'''
 
 	#ideas about what we can do:
 	#1: item item collab
