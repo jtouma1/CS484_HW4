@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import threading
 from movie import *
+from user import *
 
 
 #helper function that puts all data into pandas dataframes with correct headers
@@ -89,6 +90,7 @@ def get_movies():
 	#grabs each movie id and makes a Movie object with all attributes associated with the movie id
 	#last movie id is 65133
 	movies = []
+	users = dict()
 	for movie_id in movies_ids:
 		#make movie
 		movie = Movie(movie_id)
@@ -102,8 +104,15 @@ def get_movies():
 			movie.genres.append(genre[2])
 		for rating in train_data.query('movieID == @movie_id').itertuples():
 			movie.ratings.append((rating[1],rating[3]))
+			if users.get(rating[1]) is None:
+				users.update({rating[1] : User(rating[1], [(rating[2],rating[3])])})
+			else:
+				user = users.get(rating[1])
+				user.movies.append((rating[2],rating[3]))
+				users.update({rating[1] : user})
+
 		#print("adding movie " + str(movie_id)+" to list")
 		movies.append(movie)
 	print("finished making movies")
 
-	return movies
+	return movies,users

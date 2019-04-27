@@ -6,7 +6,11 @@ def main():
 	#just so you have access to all the data
 	actor_data,director_data,genre_data,tags_data,user_tag_data,train_data,test_data = get_dataframes()
 	#all movie objects
-	movies = get_movies()
+	movies,users = get_movies()
+	for key,val in users.items():
+		print('Key: {}   UserID: {}'.format(key, val.id))
+		for movie,rating in val.movies:
+			print('\tMovieID: {},   Rating: {}'.format(movie, rating))
 	e = time.time()
 	#takes about 3.5 minutes rn
 	print("runtime = " + str(e-s) + " seconds")
@@ -30,6 +34,6 @@ def main():
 		#this is more like clustering users together and putting movies into the system to see how each user would like it
 
 
-	print(movies[0],movies[1])
+	#print(movies[0],movies[1])
 if __name__ == '__main__':
 	main()
