@@ -31,6 +31,7 @@ class Movie:
 	def from_dict(movie_dict):
 		return Movie(movie_dict['id'],movie_dict['actors'],movie_dict['director'],movie_dict['genres'],movie_dict['tags'],movie_dict['ratings'])
 
+	#counts the number of matches between this movie and other (actors, directors, genres, tags) multiplied by the weights at top of this file
 	def compare(self, other):
 		similarities = 0
 		#compare actors
@@ -54,10 +55,12 @@ class Movie:
 				if gen == other_gen:
 					similarities += 1 * self.genre_sim
 		#print('finished genres')
+
 		#compare tags
 		for tag in self.tags:
 			for other_tag in other.tags:
 				if tag[0] == other_tag[0]:
 					similarities += min(tag[1], other_tag[1])
 		#print('finihsed tags')
+
 		return similarities

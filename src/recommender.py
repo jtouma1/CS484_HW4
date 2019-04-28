@@ -16,6 +16,7 @@ def main():
 	print('Number of users: {}'.format(len(users)))
 	print('Number of movies: {}'.format(len(movies)))
 
+	#populate final_ratings with ratings using User.get_rating(movie dictionary, movie to get rating for)
 	final_ratings = []
 	counter = 0
 	for test in test_data.itertuples():
@@ -23,18 +24,21 @@ def main():
 		mov_id = test[2]
 		#print('Predicting {}, {}'.format(u_id, mov_id))
 		movie = movies.get(mov_id)
-		if movie is None:
+		if movie is None:		#some movies aren't found for some reason
 			print('couldnt find movie {}'.format(str(mov_id)))
 		user = users.get(u_id)
-		pred_rating = user.get_rating(movies, movie)
+		pred_rating = user.get_rating(movies, movie)		#gets predicted rating of movie from this user
 		final_ratings.append(pred_rating)
 		if (counter % 100) == 0:
 			print('done with {}'.format(counter))
 		counter += 1
-	with open('output.txt', 'w') as f:
+	with open('output.txt', 'w') as f:		#write predicted ratings out to file
 		for rating in final_ratings:
 			f.write("%s\n" % str(rating))
 
+#runtime currently at 6748 seconds
+#score 1.13
+#rank 40
 
 	e = time.time()
 	#takes about 3.5 minutes rn
