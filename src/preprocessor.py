@@ -95,13 +95,13 @@ def get_movies():
 		#make movie
 		movie = Movie(movie_id)
 		for actor in actor_data.query('movieID == @movie_id').itertuples():
-			movie.actors.append(actor[2:])
+			movie.actors.update({actor[2] : actor[3:]})
 		for director in director_data.query('movieID == @movie_id').itertuples():
-			movie.director.append(director[2:])
+			movie.director.update({director[2] : director[3]})
 		for tags in tags_data.query('movieID == @movie_id').itertuples():
-			movie.tags.append(tags[2:])
+			movie.tags.update({tags[2] : tags[3]})
 		for genre in genre_data.query('movieID == @movie_id').itertuples():
-			movie.genres.append(genre[2])
+			movie.genres.update({genre[2] : None})
 		for rating in train_data.query('movieID == @movie_id').itertuples():
 			movie.ratings.append((rating[1],rating[3]))
 		# print("adding movie " + str(movie_id)+" to list")

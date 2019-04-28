@@ -7,14 +7,14 @@ class Movie:
 
 	def __init__(self,m_id):
 		self.id = m_id
-		#list of tuples (actor_id, actor name, rank)
-		self.actors = []
-		#tuple (director_id, director name)
-		self.director = []
-		#list of strings
-		self.genres = []
-		#list of tuples (tag_id, tag weight)
-		self.tags = []
+		#{ActorID : (actor_name, actor_rank)}
+		self.actors = dict()
+		#{directorID : director_name}
+		self.director = dict()
+		#{genre : None}
+		self.genres = dict()
+		#{tagID : tag_weight}
+		self.tags = dict()
 		#list of tuples (user_id, rating)
 		self.ratings = []
 
@@ -35,32 +35,23 @@ class Movie:
 	def compare(self, other):
 		similarities = 0
 		#compare actors
-		for actor in self.actors:
-			for other_actor in other.actors:
-				#print('comparing actors {} and {}'.format(actor[0], other_actor[0]))
-				#if actor ids match, movies contain same actor
-				if actor[0] == other_actor[0]:
-					similarities += 1 * self.actor_sim
-		#print('finished actors')
+		for key, val in self.actors.items():
+			if key in other.actors:
+				similarities += 1 * self.actor_sim
 
 		#compare directors
-		for dirc in self.director:
-			for other_dirc in other.director:
-				if dirc[0] == other_dirc[0]:
-					similarities += 1 * self.director_sim
+		for key, val in self.director.items():
+			if key in other.director:
+				similarities += 1 * self.director_sim
 
 		#compare genres
-		for gen in self.genres:
-			for other_gen in other.genres:
-				if gen == other_gen:
-					similarities += 1 * self.genre_sim
-		#print('finished genres')
+		for key, val in self.genres.items():
+			if key in other.genres:
+				similarities += 1 * self.director_sim
 
 		#compare tags
-		for tag in self.tags:
-			for other_tag in other.tags:
-				if tag[0] == other_tag[0]:
-					similarities += min(tag[1], other_tag[1])
-		#print('finihsed tags')
+		for key, val in self.tags.items():
+			if key in other.tags:
+				similarities += min(val, other.tags.get(key))
 
 		return similarities

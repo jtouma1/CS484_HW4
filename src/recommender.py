@@ -32,13 +32,20 @@ def main():
 		if (counter % 100) == 0:
 			print('done with {}'.format(counter))
 		counter += 1
-	with open('output.txt', 'w') as f:		#write predicted ratings out to file
+	with open('output1.txt', 'w') as f:		#write predicted ratings out to file
 		for rating in final_ratings:
 			f.write("%s\n" % str(rating))
 
-#runtime currently at 6748 seconds
+#before changing movie attributes to dicts
+#runtime 6748 seconds
 #score 1.13
 #rank 40
+
+
+#after changing attributes to dicts
+#rutnime 685 seconds
+#score 1.14
+#rank 42
 
 	e = time.time()
 	#takes about 3.5 minutes rn
