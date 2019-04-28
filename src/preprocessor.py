@@ -89,7 +89,7 @@ def get_movies():
 	print("finished finding IDs")
 	#grabs each movie id and makes a Movie object with all attributes associated with the movie id
 	#last movie id is 65133
-	movies = []
+	movies = dict()
 	users = dict()
 	for movie_id in movies_ids:
 		#make movie
@@ -97,22 +97,25 @@ def get_movies():
 		for actor in actor_data.query('movieID == @movie_id').itertuples():
 			movie.actors.append(actor[2:])
 		for director in director_data.query('movieID == @movie_id').itertuples():
-			movie.director = director[2:]
+			movie.director.append(director[2:])
 		for tags in tags_data.query('movieID == @movie_id').itertuples():
 			movie.tags.append(tags[2:])
 		for genre in genre_data.query('movieID == @movie_id').itertuples():
 			movie.genres.append(genre[2])
 		for rating in train_data.query('movieID == @movie_id').itertuples():
 			movie.ratings.append((rating[1],rating[3]))
-			if users.get(rating[1]) is None:
-				users.update({rating[1] : User(rating[1], [(rating[2],rating[3])])})
-			else:
-				user = users.get(rating[1])
-				user.movies.append((rating[2],rating[3]))
-				users.update({rating[1] : user})
+		# print("adding movie " + str(movie_id)+" to list")
+		movies.update({movie_id: movie})
 
-		#print("adding movie " + str(movie_id)+" to list")
-		movies.append(movie)
+	#populate users array
+	for user_data in train_data.itertuples():
+		if users.get(user_data[1]) is None:
+			users.update({user_data[1] : User(user_data[1], [(user_data[2],user_data[3])])})
+		else:
+			user = users.get(user_data[1])
+			user.movies.append((user_data[2],user_data[3]))
+			users.update({user_data[1] : user})
+
 	print("finished making movies")
 
 	return movies,users
