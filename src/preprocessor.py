@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import threading
+import time
 from movie import *
 from user import *
 
@@ -60,26 +61,12 @@ def get_dataframes():
 
 def get_movies():
 	actor_data,director_data,genre_data,tags_data,user_tag_data,train_data,test_data = get_dataframes()
-	#print(director_data.dtypes)
-	#print(genre_data.dtypes)
-	#print(tags_data.dtypes)
-	#print(user_tag_data.dtypes)
 
-	#main idea that I want to do:
+	#main idea:
 	#For each movie in the dataset 
 	#	For each user who reviewed it 
 	#		For each other movie reviewed by that customer 
 	#			Record the user's review
-
-	#movie has:
-		#actors
-			#each with a ranking 
-		#director
-		#tags
-			#each with a weight
-		#user ratings
-			#between 1-5
-		#genres
 
 	#all ids added to movies list so now we can make that many movie objects (should be 10174)
 	movies_ids = []
@@ -87,10 +74,24 @@ def get_movies():
 		if movie_id[1] not in movies_ids:
 			movies_ids.append(movie_id[1])
 	print("finished finding IDs")
-	#grabs each movie id and makes a Movie object with all attributes associated with the movie id
-	#last movie id is 65133
+	#grabs each movie id and makes a Movie object with all attributes associated with the movie id similarly with users
+	results = [None,None]
+	#threading out this process because neither are dependent on eachother's outcomes
+	t_movies = threading.Thread(target = make_movies, args = (movies_ids,actor_data,director_data,genre_data,tags_data,train_data,results))
+	t_users = threading.Thread(target = make_users, args = (train_data,results))
+	t_movies.start()
+	t_users.start()
+	t_movies.join()
+	t_users.join()
+
+	print(results[0],results[1])
+
+	return results[0],results[1]
+
+#populate movies dictionary
+def make_movies(movies_ids,actor_data,director_data,genre_data,tags_data,train_data,result):
+	s = time.time()
 	movies = dict()
-	users = dict()
 	for movie_id in movies_ids:
 		#make movie
 		movie = Movie(movie_id)
@@ -104,10 +105,16 @@ def get_movies():
 			movie.genres.update({genre[2] : None})
 		for rating in train_data.query('movieID == @movie_id').itertuples():
 			movie.ratings.append((rating[1],rating[3]))
-		# print("adding movie " + str(movie_id)+" to list")
 		movies.update({movie_id: movie})
+	result[0] = movies
+	e = time.time() 
+	print("finished making movies, took: "+ str(e-s) +" sec")
 
-	#populate users array
+
+#populate users dictionary
+def make_users(train_data,result):
+	s = time.time()
+	users = dict()
 	for user_data in train_data.itertuples():
 		if users.get(user_data[1]) is None:
 			users.update({user_data[1] : User(user_data[1], [(user_data[2],user_data[3])])})
@@ -115,7 +122,7 @@ def get_movies():
 			user = users.get(user_data[1])
 			user.movies.append((user_data[2],user_data[3]))
 			users.update({user_data[1] : user})
+	result[1] = users
+	e = time.time() 
+	print("finished making users, took:"+ str(e-s) +" sec")
 
-	print("finished making movies")
-
-	return movies,users

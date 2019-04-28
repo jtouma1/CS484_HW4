@@ -3,7 +3,7 @@ class Movie:
 	#arbitrary static weights for similarities
 	actor_sim = 3
 	director_sim = 10
-	genre_sim = 2
+	genre_sim = 7
 
 	def __init__(self,m_id):
 		self.id = m_id
@@ -31,7 +31,7 @@ class Movie:
 	def from_dict(movie_dict):
 		return Movie(movie_dict['id'],movie_dict['actors'],movie_dict['director'],movie_dict['genres'],movie_dict['tags'],movie_dict['ratings'])
 
-	#counts the number of matches between this movie and other (actors, directors, genres, tags) multiplied by the weights at top of this file
+	#counts the number of matches between this movie and other (actors, directors, genres, tags) multiplied by the weights at top of this file and weights given to tags
 	def compare(self, other):
 		similarities = 0
 		#compare actors
@@ -49,9 +49,9 @@ class Movie:
 			if key in other.genres:
 				similarities += 1 * self.director_sim
 
-		#compare tags
+		#compare tags 
 		for key, val in self.tags.items():
 			if key in other.tags:
-				similarities += min(val, other.tags.get(key))
+				similarities += min(val, other.tags.get(key)) * self.tags[key]
 
 		return similarities
