@@ -1,0 +1,4 @@
+- Main function in recommender.py
+- Implementation of prediction algorithim in user.py 
+- run by calling python3 recommender.py
+- libraries used: pandas and numpy

@@ -18,7 +18,7 @@ class User:
 			if sim > max_sim:		#keep track of movie that is most similar to the desired movie
 				closest_movie = mov
 				max_sim = sim
-		if closest_movie is None:		#sometimes happens. not sure why
+		if closest_movie is None:		
 			print('no movie similarties')
 			return 2.5
 		return closest_movie[1]		#return the rating of the most similar movie
