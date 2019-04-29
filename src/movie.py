@@ -1,6 +1,6 @@
 class Movie:
 
-	#arbitrary static weights for similarities
+	#arbitrary static weights for similarities, genre holds more weight than directors, which holds more weight than actors
 	actor_sim = 3
 	director_sim = 7
 	genre_sim = 10
