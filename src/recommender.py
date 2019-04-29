@@ -1,11 +1,11 @@
 from preprocessor import *
 import time 
 import json
+
 def main():
 	s = time.time()
 	actor_data,director_data,genre_data,tags_data,user_tag_data,train_data,test_data = get_dataframes()
-	movies,users = get_movies()
-
+	movies,users = get_movies(actor_data,director_data,genre_data,tags_data,user_tag_data,train_data,test_data)
 	#prints out the users dictionary
 	#for key,val in users.items():
 	#	print('Key: {}   UserID: {}'.format(key, val.id))
@@ -38,7 +38,6 @@ def main():
 #runtime 6748 seconds
 #score 1.13
 #rank 40
-
 
 #after changing attributes to dicts
 #rutnime 685 seconds

@@ -2,8 +2,8 @@ class Movie:
 
 	#arbitrary static weights for similarities
 	actor_sim = 3
-	director_sim = 10
-	genre_sim = 7
+	director_sim = 7
+	genre_sim = 10
 
 	def __init__(self,m_id):
 		self.id = m_id
